@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import store from "./store";
+import { increaseAsync, increase } from "./actions";
+import { ASYNCINCREMENT } from "./constants";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = store.getState();
+    store.subscribe(() => {
+      const state = store.getState();
+      this.setState(state);
+    });
+  }
+  increaseAsync = () => {
+    const action = increaseAsync();
+    store.dispatch(action);
+  };
+  increase = () => {
+    const action = increase();
+    store.dispatch(action);
+  };
+  increaseAsyncSaga = () => {
+    store.dispatch({
+      type: ASYNCINCREMENT
+    });
+  };
+  render() {
+    const { number } = this.state;
+    return (
+      <div className="App">
+        <h1>这是app</h1>
+        <h2>数字为{number}</h2>
+        <button onClick={this.increase}>同步增加</button>
+        <button onClick={this.increaseAsync}>异步增加thunk</button>
+        <button onClick={this.increaseAsyncSaga}>异步增加saga</button>
+      </div>
+    );
+  }
 }
-
 export default App;

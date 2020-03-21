@@ -1,0 +1,2 @@
+export const ASYNCINCREMENT = "ASYNCINCREMENT"
+export const INCREMENT = "INCREMENT"
